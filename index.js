@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --success: #00b894;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .payment-methods {
+            padding: 30px;
+        }
+        
+        .payment-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .payment-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--light);
+            border: 1px solid #eee;
+        }
+        
+        .payment-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .payment-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-right: 20px;
+        }
+        
+        .payment-details {
+            flex: 1;
+        }
+        
+        .payment-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .payment-number {
+            font-size: 14px;
+            color: #666;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .copy-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .qris-container {
+            text-align: center;
+            margin-top: 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        .qris-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .qris-image {
+            max-width: 250px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .payment-option {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .payment-logo {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .copy-btn {
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Payment Gateway</h1>
+            <p>Choose your preferred payment method</p>
+        </div>
+        
+        <div class="payment-methods">
+            <h2 class="payment-title">E-Wallet Payment</h2>
+            
+            <div class="payment-option" onclick="copyToClipboard('089649925248', 'DANA')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA" class="payment-logo">
+                <div class="payment-details">
+                    <div class="payment-name">DANA</div>
+                    <div class="payment-number" id="dana-number">089649925248</div>
+                </div>
+                <button class="copy-btn">Copy</button>
+            </div>
+            
+            <div class="payment-option" onclick="copyToClipboard('089649925248', 'Gopay')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" alt="Gopay" class="payment-logo">
+                <div class="payment-details">
+                    <div class="payment-name">Gopay</div>
+                    <div class="payment-number" id="gopay-number">089649925248</div>
+                </div>
+                <button class="copy-btn">Copy</button>
+            </div>
+            
+            <div class="payment-option" onclick="copyToClipboard('6289649925248', 'OVO')">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo.svg" alt="OVO" class="payment-logo">
+                <div class="payment-details">
+                    <div class="payment-name">OVO</div>
+                    <div class="payment-number" id="ovo-number">6289649925248</div>
+                </div>
+                <button class="copy-btn">Copy</button>
+            </div>
+            
+            <div class="qris-container">
+                <div class="qris-title">QRIS Payment</div>
+                <img src="https://1751581058219.jpeg" alt="QRIS Code" class="qris-image">
+                <p>Scan this QR code to pay</p>
+            </div>
+            
+            <div class="instructions">
+                <h3>Payment Instructions:</h3>
+                <ol>
+                    <li>Select your preferred payment method above</li>
+                    <li>For e-wallets: Copy the number and paste in your payment app</li>
+                    <li>For QRIS: Scan the QR code using your banking/e-wallet app</li>
+                    <li>Make sure the payment amount is correct before confirming</li>
+                    <li>After payment, please send the receipt to our customer service</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="footer">
+            &copy; 2023 Payment Gateway. All rights reserved.
+        </div>
+    </div>
+    
+    <script>
+        function copyToClipboard(text, method) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert(method + ' number copied to clipboard: ' + text);
+            }, function() {
+                // Fallback for browsers that don't support clipboard API
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert(method + ' number copied to clipboard: ' + text);
+            });
+        }
+    </script>
+</body>
+</html>
